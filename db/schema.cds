@@ -1,8 +1,8 @@
-namespace com.logaligroup;   // Un namespace para clasificar
+namespace com.logaligroup.jcd; // Un namespace para clasificar
 
 // Aspects
 using {
-    cuid,      // key ID  : UUID;
+    cuid, // key ID  : UUID;
     managed,
     sap.common.CodeList
 } from '@sap/cds/common';
@@ -14,31 +14,31 @@ type decimal : Decimal(5, 3);
 entity Products : cuid, managed {
     product       : String(8);
     productName   : String(80);
-    description   : LargeString;          // 1024 chars
+    description   : LargeString; // 1024 chars
     category      : Association to Categories; //category      --- category_ID   // 1..1 relation  //Fiels *_ID es el almacenado
     subCategory   : Association to SubCategories; //subCategory   --- subCategory_ID    // 1..1 relation //Fiels *_ID es el almacenado
     statu         : Association to Status; //statu --- statu_code
     price         : Decimal(5, 2);
-    rating        : Decimal(3, 2);     //Decimal de 3 dígitos y 2 son decimales
+    rating        : Decimal(3, 2); //Decimal de 3 dígitos y 2 son decimales
     currency      : String;
-    detail        : Association to ProductDetails;
-    supplier      : Association to Suppliers;
+    detail        : Association to ProductDetails; // 1..1 relation
+    supplier      : Association to Suppliers; // 1..1 relation
     toReviews     : Association to many Reviews
-                        on toReviews.product = $self;
+                        on toReviews.product = $self; // 1..N relation
     toInventories : Association to many Inventories
-                        on toInventories.product = $self;
+                        on toInventories.product = $self; // 1..N relation
     toSales       : Association to many Sales
-                        on toSales.product = $self;
+                        on toSales.product = $self; // 1..N relation
 };
 
 entity ProductDetails : cuid {
-    baseUnit   : String default 'EA';  //Con valor por defecto
+    baseUnit   : String default 'EA'; //Con valor por defecto
     width      : decimal;
     height     : decimal;
     depth      : decimal;
     weight     : decimal;
-    unitVolume : String default 'CM';  //Con valor por defecto
-    unitWeight : String default 'KG';  //Con valor por defecto
+    unitVolume : String default 'CM'; //Con valor por defecto
+    unitWeight : String default 'KG'; //Con valor por defecto
 };
 
 entity Suppliers : cuid {
@@ -95,12 +95,12 @@ entity Status : CodeList {
 entity Categories : cuid {
     category        : String(80);
     toSubCategories : Association to many SubCategories
-                          on toSubCategories.category = $self;   //1..N relation is needed for navigation
+                          on toSubCategories.category = $self; //1..N relation is needed for navigation
 };
 
 entity SubCategories : cuid {
     subCategory : String(80);
-    category    : Association to Categories;  //category      --- category_ID
+    category    : Association to Categories; //category      --- category_ID
 };
 
 entity Departments : cuid {

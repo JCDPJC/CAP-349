@@ -1,4 +1,4 @@
-using {com.logaligroup as entities} from '../db/schema';  //Le indico el schema
+using {com.logaligroup.jcd as entities} from '../db/schema';  //Le indico el schema
 
 service LogaliGroup {                                     // Inicio de la definición del servicio
     entity Products         as projection on entities.Products;
