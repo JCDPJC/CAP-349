@@ -4,7 +4,7 @@
             "db": {
                 "kind": "sqlite",
                 "credentials": {
-                    "database": "products.sqlite"
+                    "url": "products.sqlite"
                 }
             },
             "auth":"dummy"
