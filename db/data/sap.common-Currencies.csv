@@ -1,0 +1,37 @@
+code,symbol,minorUnit,name,descr
+USD,$,2,United States Dollar,US Dollar
+EUR,€,2,Euro,European Union Currency
+JPY,¥,0,Japanese Yen,Japanese Currency
+GBP,£,2,Pound Sterling,British Currency
+AUD,A$,2,Australian Dollar,Australian Currency
+CAD,C$,2,Canadian Dollar,Canadian Currency
+CHF,CHF,2,Swiss Franc,Swiss Currency
+CNY,¥,2,Chinese Yuan,Chinese Currency
+SEK,kr,2,Swedish Krona,Swedish Currency
+NZD,NZ$,2,New Zealand Dollar,New Zealand Currency
+MXN,$,2,Mexican Peso,Mexican Currency
+SGD,S$,2,Singapore Dollar,Singapore Currency
+HKD,HK$,2,Hong Kong Dollar,Hong Kong Currency
+NOK,kr,2,Norwegian Krone,Norwegian Currency
+KRW,₩,0,South Korean Won,South Korean Currency
+TRY,₺,2,Turkish Lira,Turkish Currency
+RUB,₽,2,Russian Ruble,Russian Currency
+INR,₹,2,Indian Rupee,Indian Currency
+BRL,R$,2,Brazilian Real,Brazilian Currency
+ZAR,R,2,South African Rand,South African Currency
+ARS,$,2,Argentine Peso,Argentine Currency
+CLP,$,0,Chilean Peso,Chilean Currency
+COP,$,2,Colombian Peso,Colombian Currency
+PEN,S/,2,Peruvian Sol,Peruvian Currency
+THB,฿,2,Thai Baht,Thai Currency
+VND,₫,0,Vietnamese Dong,Vietnamese Currency
+IDR,Rp,2,Indonesian Rupiah,Indonesian Currency
+MYR,RM,2,Malaysian Ringgit,Malaysian Currency
+PHP,₱,2,Philippine Peso,Philippine Currency
+PLN,zł,2,Polish Zloty,Polish Currency
+CZK,Kč,2,Czech Koruna,Czech Currency
+HUF,ft,2,Hungarian Forint,Hungarian Currency
+DKK,kr,2,Danish Krone,Danish Currency
+ILS,₪,2,Israeli Shekel,Israeli Currency
+SAR,﷼,2,Saudi Riyal,Saudi Currency
+AED,د.إ,2,United Arab Emirates Dirham,UAE Currency

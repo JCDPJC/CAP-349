@@ -4,7 +4,8 @@ namespace com.logaligroup.jcd; // Un namespace para clasificar
 using {
     cuid, // key ID  : UUID;
     managed,
-    sap.common.CodeList
+    sap.common.CodeList,
+    sap.common.Currencies
 } from '@sap/cds/common';
 
 // Types
@@ -14,13 +15,17 @@ type decimal : Decimal(5, 3);
 entity Products : cuid, managed {
     product       : String(8);
     productName   : String(80);
+// Image
+    image         : LargeBinary  @Core.MediaType: imageType @UI.IsImage;  //Image type in field imageType, field is an Image
+    imageType     : String       @Core.IsMediaType;    
+
     description   : LargeString; // 1024 chars
     category      : Association to Categories; //category      --- category_ID   // 1..1 relation  //Fiels *_ID es el almacenado
     subCategory   : Association to SubCategories; //subCategory   --- subCategory_ID    // 1..1 relation //Fiels *_ID es el almacenado
     statu         : Association to Status; //statu --- statu_code
-    price         : Decimal(5, 2);
+    price         : Decimal(8, 2);
     rating        : Decimal(3, 2); //Decimal de 3 dígitos y 2 son decimales
-    currency      : String;
+    currency      : Association to Currencies;      // 1..1 relation, currency_code
     detail        : Association to ProductDetails; // 1..1 relation
     supplier      : Association to Suppliers; // 1..1 relation
     toReviews     : Association to many Reviews
@@ -57,6 +62,7 @@ entity Contacts : cuid {
 entity Reviews : cuid {
     rating     : Decimal(3, 2);
     date       : Date;
+    user       : String(20);
     reviewText : LargeString;
     product    : Association to Products;
 };
@@ -73,6 +79,7 @@ entity Inventories : cuid {
 };
 
 entity Sales : cuid {
+    monthCode     : String(2);
     month         : String(20);
     year          : String(4);
     quantitySales : Integer;
@@ -83,11 +90,12 @@ entity Sales : cuid {
 /** Code List */
 
 entity Status : CodeList {
-    key code : String(20) enum {
+    key code        : String(20) enum {
             InStock         = 'In Stock';
             OutOfStock      = 'Out of Stock';
             LowAvailability = 'Low Availabilit';
-        }
+        };
+        criticality : Integer;   //Store Criticality of code
 };
 
 /** Value Helps */
@@ -105,4 +113,10 @@ entity SubCategories : cuid {
 
 entity Departments : cuid {
     department : String(40);
+};
+
+entity sap.common.Currencies : CodeList {
+  key code  : String(3); //> ISO 4217 alpha-3 codes
+  symbol    : String(5); //> for example, $, €, £, ₪, ...
+  minorUnit : Int16;     //> for example, 0 or 2
 };
