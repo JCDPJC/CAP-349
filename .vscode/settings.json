@@ -1,2 +1,10 @@
 {
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Priduct",
+            "database": "${workspaceFolder:CAP-349}/products.sqlite"
+        }
+    ]
 }

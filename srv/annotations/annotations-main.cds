@@ -6,3 +6,5 @@ using from './annotations-subcategories';
 using from './annotations-reviews';
 using from './annotations-inventories';
 using from './annotations-sales';
+using from './annotations-departments';
+using from './annotations-options';

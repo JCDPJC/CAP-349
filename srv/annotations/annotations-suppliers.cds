@@ -1,17 +1,16 @@
 using {LogaliGroup as service} from '../service';
-
 using from './annotations-contacts';
 
 annotate service.Suppliers with { //Field Labels with @title
-    ID           @title : 'Supplier'
-                 @Common: {
+    ID            @title : 'Supplier'
+                  @Common: {
         Text           : supplierName,
         TextArrangement: #TextOnly
     };
 
-    supplier     @title : 'Supplier';
-    supplierName @title : 'Supplier Name';
-    webAddress   @title : 'Web Address';
+    supplier      @title : 'Supplier'       @Common.FieldControl: #ReadOnly;
+    supplierName  @title : 'Supplier Name'  @Common.FieldControl: #ReadOnly;
+    webAddress    @title : 'Web Address'    @Common.FieldControl: #ReadOnly;
 };
 
 

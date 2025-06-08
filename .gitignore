@@ -1,5 +1,6 @@
 # CAP A25C349JCD
 _out
+*.env
 *.db
 *.sqlite
 connection.properties

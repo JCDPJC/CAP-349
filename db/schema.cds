@@ -8,8 +8,10 @@ using {
     sap.common.Currencies
 } from '@sap/cds/common';
 
+using {API_BUSINESS_PARTNER as cloud} from '../srv/external/API_BUSINESS_PARTNER';
+
 // Types
-type decimal : Decimal(5, 3);
+type decimal : Decimal(6, 3);
 
 // Definimos entidades, sólo estas van en plural
 entity Products : cuid, managed {
@@ -26,11 +28,12 @@ entity Products : cuid, managed {
     price         : Decimal(8, 2);
     rating        : Decimal(3, 2); //Decimal de 3 dígitos y 2 son decimales
     currency      : Association to Currencies;      // 1..1 relation, currency_code
-    detail        : Association to ProductDetails; // 1..1 relation
+    detail        : Composition of ProductDetails; // 1..1 relation of composition - Deep Insert
     supplier      : Association to Suppliers; // 1..1 relation
+    supplierCloud : Association to cloud.A_Supplier;   //Entity from external service
     toReviews     : Association to many Reviews
                         on toReviews.product = $self; // 1..N relation
-    toInventories : Association to many Inventories
+    toInventories : Composition of many Inventories  // 1..n relation of composition - Deep Insert
                         on toInventories.product = $self; // 1..N relation
     toSales       : Association to many Sales
                         on toSales.product = $self; // 1..N relation
@@ -70,10 +73,10 @@ entity Reviews : cuid {
 entity Inventories : cuid {
     stockNumber : String(9);
     department  : Association to Departments;
-    min         : Integer;
-    max         : Integer;
+    min         : Integer default 0;
+    max         : Integer default 500;
     target      : Integer;
-    quantity    : Decimal(4, 3);
+    quantity    : Decimal(6, 3);
     baseUnit    : String default 'EA';
     product     : Association to Products;
 };
@@ -97,6 +100,13 @@ entity Status : CodeList {
         };
         criticality : Integer;   //Store Criticality of code
 };
+
+entity Options : CodeList {
+    key code : String(10) enum {
+        A = 'Add';
+        D = 'Discount';
+    }
+}
 
 /** Value Helps */
 

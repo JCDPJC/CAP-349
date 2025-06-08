@@ -1,0 +1,17 @@
+### Get Products
+Get http://localhost:4004/odata/v4/logali-group/Products
+
+
+### Get Product filter
+Get http://localhost:4004/odata/v4/logali-group/Products?$filter=ID eq '05d5d225-e6e9-49b0-a339-de815cb71ed3'
+
+
+### Get Product, 2 key fields because DRAFT is enabled
+Get http://localhost:4004/odata/v4/logali-group/Products(ID='05d5d225-e6e9-49b0-a339-de815cb71ed3',IsActiveEntity='true')
+
+
+### Get ProductDetails
+Get http://localhost:4004/odata/v4/logali-group/ProductDetails
+
+### Get ProductDetail
+Get http://localhost:4004/odata/v4/logali-group/ProductDetails('03f2abba-f870-49f7-97fe-255103e67d5b')

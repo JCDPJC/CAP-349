@@ -9,25 +9,27 @@ using from './annotations-sales';
 annotate service.Products with @odata.draft.enabled;
 
 annotate service.Products with { //Field Labels with @title
-    product     @title            : 'Product';
-    productName @title            : 'Product Name';
-    category    @title            : 'Category';
-    subCategory @title            : 'SubCategory';
-    supplier    @title            : 'Supplier';
-    statu       @title            : 'Status';
-    rating      @title            : 'Rating';
-    price       @title            : 'Price'  @Measures.ISOCurrency: currency_code; // Need a currency field
-    currency    @Common.IsCurrency: true; // Is a currency del vocabulario @Common
-    image       @title            : 'Image';
+    product       @title            : 'Product';
+    productName   @title            : 'Product Name';
+    description   @title: 'Description'  @UI.MultiLineText;
+    category      @title            : 'Category';
+    subCategory   @title            : 'SubCategory';
+    supplier      @title            : 'Supplier';
+    supplierCloud @title            : 'Supplier Cloud';
+    statu         @title            : 'Status';
+    rating        @title            : 'Rating';
+    price         @title: 'Price'        @Measures.ISOCurrency: currency_code; // Need a currency field
+    currency      @Common.IsCurrency: true; // Is a currency del vocabulario @Common
+    image         @title            : 'Image';
 };
 
 annotate service.Products with {
-    statu       @Common: { //Status text instead code
+    statu         @Common: { //Status text instead code
         Text           : statu.name, // Use association
         TextArrangement: #TextOnly
     };
 
-    category    @Common: {
+    category      @Common: {
         Text           : category.category,
         TextArrangement: #TextOnly,
         ValueListWithFixedValues,
@@ -42,7 +44,7 @@ annotate service.Products with {
         },
     };
 
-    subCategory @Common: {
+    subCategory   @Common: {
         Text           : subCategory.subCategory,
         TextArrangement: #TextOnly,
         ValueListWithFixedValues,
@@ -64,7 +66,7 @@ annotate service.Products with {
         }
     };
 
-    supplier    @Common: {
+    supplier      @Common: {
         Text           : supplier.supplierName,
         TextArrangement: #TextOnly,
         ValueList      : {
@@ -78,32 +80,49 @@ annotate service.Products with {
         }
     };
 
-    statu       @Common: {ValueListWithFixedValues}
+    statu         @Common: {ValueListWithFixedValues};
+
+    // The Field is a VH
+    supplierCloud @Common: {ValueList: {
+        $Type         : 'Common.ValueListType',
+        CollectionPath: 'CSuppliers',
+        Parameters    : [
+            {
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: supplierCloud_Supplier,
+                ValueListProperty: 'ID'
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'SupplierName'
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'FullName'
+            }
+        ]
+    }, }
 };
 
 annotate service.Products with @(
 
-// Side effect
-    Common.SideEffects: {
-        $Type : 'Common.SideEffectsType',
-        SourceProperties : [
-            supplier_ID    //field as source, the navigation field
+    // Side effect
+    Common.SideEffects               : {
+        $Type           : 'Common.SideEffectsType',
+        SourceProperties: [supplier_ID //field as source, the navigation field
         ],
-        TargetEntities : [
-            supplier      //Target entity
+        TargetEntities  : [supplier //Target entity
         ],
     },
 
-// Restriction in a filteer
-    Capabilities.FilterRestrictions: {
-        $Type : 'Capabilities.FilterRestrictionsType',
-        FilterExpressionRestrictions : [
-            {
-                $Type : 'Capabilities.FilterExpressionRestrictionType',
-                Property : product,
-                AllowedExpressions : 'SearchExpression'
-            }
-        ]
+    // Restriction in a filteer
+    Capabilities.FilterRestrictions  : {
+        $Type                       : 'Capabilities.FilterRestrictionsType',
+        FilterExpressionRestrictions: [{
+            $Type             : 'Capabilities.FilterExpressionRestrictionType',
+            Property          : product,
+            AllowedExpressions: 'SearchExpression'
+        }]
     },
 
     UI.HeaderInfo                    : { //Header Info
@@ -138,7 +157,8 @@ annotate service.Products with @(
             }
         },
         {
-            $Type: 'UI.DataField', //Fielld Type
+            $Type: 'UI.DataField',
+            //Fielld Type
             Value: product // Field Name for the annotation
         },
         {
@@ -163,8 +183,10 @@ annotate service.Products with @(
             }
         },
         {
-            $Type                : 'UI.DataFieldForAnnotation', //The field affected will be set in Target - Call annotation inside a Table
-            Target               : '@UI.DataPoint#Variant1', //DataPoint - with qualifier #variant1
+            $Type                : 'UI.DataFieldForAnnotation',
+            //The field affected will be set in Target - Call annotation inside a Table
+            Target               : '@UI.DataPoint#Variant1',
+            //DataPoint - with qualifier #variant1
             ![@HTML5.CssDefaults]: {
                 $Type: 'HTML5.CssDefaultsType',
                 width: '10rem' // Define width
@@ -178,7 +200,8 @@ annotate service.Products with @(
 
     UI.DataPoint #Variant1           : { //DataPoint - with qualifier #variant1
         $Type        : 'UI.DataPointType',
-        Visualization: #Rating, // Is a rating
+        Visualization: #Rating,
+        // Is a rating
         Value        : rating // Field Name for the annotation
     },
 
@@ -201,6 +224,10 @@ annotate service.Products with @(
             },
             {
                 $Type: 'UI.DataField',
+                Value: supplierCloud_Supplier,
+            },
+            {
+                $Type: 'UI.DataField',
                 Value: category_ID
             },
             {
@@ -214,32 +241,25 @@ annotate service.Products with @(
         Data : [{
             $Type: 'UI.DataField',
             Value: description
-     //       ![@Common.FieldControl] : 
+        //       ![@Common.FieldControl] :
         }]
     },
     UI.FieldGroup #Statu             : {
         $Type: 'UI.FieldGroupType',
         Data : [{
-            $Type      : 'UI.DataField',
-            Value      : statu_code,
-            Criticality: statu.criticality,
-            Label      : '',
-            ![@Common.FieldControl] : {
-                    $edmJson: {
-                        $If: [     //Expresión dinámica
-                            {
-                                $Eq: [
-                                    {
-                                        $Path: 'IsActiveEntity'
-                                    },
-                                    false
-                                ]
-                            },
-                            1,  //ReadOnly
-                            3   //Optional
-                        ]
-                    }
-                },
+            $Type                  : 'UI.DataField',
+            Value                  : statu_code,
+            Criticality            : statu.criticality,
+            Label                  : '',
+            ![@Common.FieldControl]: {$edmJson: {$If: [ //Expresión dinámica
+                {$Eq: [
+                    {$Path: 'IsActiveEntity'},
+                    false
+                ]},
+                1,
+                //ReadOnly
+                3 //Optional
+            ]}},
         }]
     },
     UI.FieldGroup #Price             : {
@@ -296,7 +316,8 @@ annotate service.Products with @(
                 },
                 {
                     $Type : 'UI.ReferenceFacet',
-                    Target: 'supplier/contact/@UI.FieldGroup#Contact', // Navigation using supplier first
+                    Target: 'supplier/contact/@UI.FieldGroup#Contact',
+                    // Navigation using supplier first
                     Label : 'Contact Person'
                 }
             ],
